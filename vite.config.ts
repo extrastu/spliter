@@ -8,6 +8,7 @@ export default defineConfig({
     react(),
     {
       name: 'transform-to-classic-script',
+      apply: 'build', // 仅在生产构建时转为经典脚本，保证开发模式 (dev) HMR 正常运行
       enforce: 'post',
       transformIndexHtml(html) {
         return html

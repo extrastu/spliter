@@ -1,7 +1,41 @@
 import type { XhsMiniTool } from "../types/xhs"
 
+// 本地开发调试模拟支持（在浏览器开发环境下模拟小红书容器 JS API）
+if (
+  typeof window !== "undefined" &&
+  !window.xhs &&
+  (window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname.endsWith(".local"))
+) {
+  let simulatedFollow = 0
+  window.xhs = {
+    miniTool: {
+      postNote: async (options) => {
+        console.log("[小红书容器模拟] postNote 唤起发布页:", options)
+        return { errMsg: "postNote:ok" }
+      },
+      saveImageToPhotosAlbum: async (options) => {
+        console.log("[小红书容器模拟] saveImageToPhotosAlbum 保存相册:", options.filePath.slice(0, 60))
+        return { errMsg: "saveImageToPhotosAlbum:ok" }
+      },
+      writeTempFile: async (options) => {
+        return { errMsg: "writeTempFile:ok", filePath: options.data }
+      },
+      getFollowStatus: async () => {
+        return { errMsg: "getFollowStatus:ok", follow_status: simulatedFollow }
+      },
+      followAuthor: async () => {
+        simulatedFollow = 1
+        console.log("[小红书容器模拟] followAuthor: 关注成功，状态变更为已关注 (1)")
+        return { errMsg: "followAuthor:ok", follow_status: 1 }
+      },
+    },
+  }
+}
+
 /**
- * 判断当前是否处于小红书小工具容器环境
+ * 判断当前是否处于小红书小工具容器环境（或本地调试模拟环境）
  */
 export function isXhsContainer(): boolean {
   if (typeof window === "undefined") return false
