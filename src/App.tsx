@@ -3,6 +3,7 @@ import { ThemeToggle } from "./components/ThemeToggle"
 import { ArrowRightIcon } from "./components/Icons"
 import { HeroDemo } from "./components/HeroDemo"
 import { Splitter } from "./components/Splitter"
+import { XhsFollowButton } from "./components/XhsFollowButton"
 
 export default function App() {
   const [route, setRoute] = useState<string>(() => {
@@ -53,7 +54,10 @@ export default function App() {
       <main className="mx-auto flex min-h-svh w-full max-w-2xl flex-col px-4 sm:px-6">
         <nav className="flex h-14 sm:h-16 items-center justify-between">
           {Logo}
-          <ThemeToggle />
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <XhsFollowButton />
+            <ThemeToggle />
+          </div>
         </nav>
 
         <section className="pt-6 pb-6 sm:pt-8 sm:pb-8">
@@ -80,7 +84,8 @@ export default function App() {
     <main className="mx-auto flex min-h-svh w-full max-w-5xl flex-col px-4 sm:px-6">
       <nav className="flex h-14 sm:h-16 items-center justify-between">
         {Logo}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-2.5 sm:gap-4">
+          <XhsFollowButton />
           <ThemeToggle />
           <a
             className="flex items-center gap-1 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground cursor-pointer"

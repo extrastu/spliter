@@ -203,3 +203,35 @@ export function Share2Icon({ className = "size-[18px]" }: { className?: string }
     </svg>
   )
 }
+
+export function XiaohongshuIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+    >
+      <path d="M19.8 8.1c-.2-.6-.7-1.1-1.3-1.4-1.2-.5-2.6-.4-3.7.2-.5.3-1 .7-1.4 1.1-.3-.7-.8-1.3-1.4-1.7-.8-.6-1.8-.8-2.8-.8-.9 0-1.7.3-2.5.8-.8.6-1.4 1.4-1.7 2.3-.3.9-.3 1.8-.1 2.8.2.8.6 1.6 1.2 2.2.8.8 1.8 1.3 2.9 1.4h.4c.2.5.5.9.8 1.3.6.7 1.4 1.2 2.3 1.4.9.2 1.8.1 2.7-.2.9-.4 1.6-1 2.1-1.8.5-.8.7-1.7.7-2.6.1-1.7-.5-3.4-1.7-4.6 0 0-.1 0-.1-.1.7-.5 1.5-.7 2.3-.6.6.1 1.2.4 1.6.8.4.5.6 1.1.5 1.7-.1.4-.3.7-.7.9-.3.2-.6.3-1 .3v1.8c.8 0 1.6-.3 2.2-.8.7-.6 1.1-1.5 1.2-2.4.1-1.1-.3-2.1-1-2.9zM8.3 12.3c-.6-.2-1.1-.6-1.4-1.2-.3-.6-.3-1.3-.1-1.9.2-.6.6-1.1 1.2-1.4.6-.3 1.2-.3 1.8-.1.6.2 1.1.6 1.4 1.2.3.6.3 1.3.1 1.9-.2.6-.6 1.1-1.2 1.4-.6.3-1.2.3-1.8.1zm6.9 3.2c-.5.4-1.1.6-1.7.5-.6-.1-1.2-.4-1.6-.9-.4-.5-.6-1.1-.5-1.7.1-.6.4-1.2.9-1.6.5-.4 1.1-.6 1.7-.5.6.1 1.2.4 1.6.9.4.5.6 1.1.5 1.7-.1.6-.4 1.2-.9 1.6z"/>
+    </svg>
+  )
+}
+
+export function CheckIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M5 12l5 5l10 -10"></path>
+    </svg>
+  )
+}

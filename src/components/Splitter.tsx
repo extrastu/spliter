@@ -2,11 +2,13 @@ import { useState, useRef, useEffect, useCallback } from "react"
 import { cn } from "../lib/utils"
 import { PostPreview } from "./PostPreview"
 import { TileGrid } from "./TileGrid"
-import { PhotoPlusIcon, DownloadIcon } from "./Icons"
+import { PhotoPlusIcon, DownloadIcon, XiaohongshuIcon } from "./Icons"
+import { saveImageToAlbum, publishNoteToXhs, isXhsContainer } from "../lib/xhs"
 
 export interface SplitPart {
   index: number
   url: string
+  dataUrl: string
   filename: string
   width: number
   height: number
@@ -52,6 +54,7 @@ async function splitImage(file: File): Promise<SplitPart[]> {
     }
     ctx.drawImage(img, i * partWidth, 0, partWidth, height, 0, 0, partWidth, height)
 
+    const dataUrl = canvas.toDataURL("image/png")
     const blob = await new Promise<Blob>((resolve, reject) => {
       canvas.toBlob(
         (b) => (b ? resolve(b) : reject(new Error("切片导出失败。"))),
@@ -62,6 +65,7 @@ async function splitImage(file: File): Promise<SplitPart[]> {
     parts.push({
       index: i + 1,
       url: URL.createObjectURL(blob),
+      dataUrl,
       filename: `${baseName} (${i + 1}).png`,
       width: partWidth,
       height,
@@ -71,15 +75,6 @@ async function splitImage(file: File): Promise<SplitPart[]> {
   return parts
 }
 
-function downloadPart(part: SplitPart) {
-  const a = document.createElement("a")
-  a.href = part.url
-  a.download = part.filename
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
-}
-
 export function Splitter() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [parts, setParts] = useState<SplitPart[]>([])
@@ -87,6 +82,23 @@ export function Splitter() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [toast, setToast] = useState<{ text: string; type?: "info" | "success" | "error" } | null>(null)
+  const [isSavingAll, setIsSavingAll] = useState(false)
+  const [isPublishing, setIsPublishing] = useState(false)
+
+  const inXhs = isXhsContainer()
+
+  const showToast = (text: string, type: "info" | "success" | "error" = "info") => {
+    setToast({ text, type })
+  }
+
+  useEffect(() => {
+    if (!toast) return
+    const timer = setTimeout(() => {
+      setToast(null)
+    }, 2800)
+    return () => clearTimeout(timer)
+  }, [toast])
 
   const updateParts = (newParts: SplitPart[]) => {
     setParts((prev) => {
@@ -116,10 +128,47 @@ export function Splitter() {
     }
   }, [])
 
-  const downloadAll = async () => {
-    for (const part of parts) {
-      downloadPart(part)
-      await new Promise((r) => setTimeout(r, 300))
+  const handleSavePart = async (part: SplitPart) => {
+    const res = await saveImageToAlbum(part.dataUrl, part.filename, part.url)
+    showToast(res.message, res.success ? "success" : "error")
+  }
+
+  const handleSaveAll = async () => {
+    if (isSavingAll || parts.length === 0) return
+    setIsSavingAll(true)
+    try {
+      let savedCount = 0
+      for (const part of parts) {
+        const res = await saveImageToAlbum(part.dataUrl, part.filename, part.url)
+        if (res.success) savedCount++
+        await new Promise((r) => setTimeout(r, 250))
+      }
+      showToast(
+        savedCount === parts.length
+          ? inXhs
+            ? "3 张切片已全部保存到系统相册"
+            : "3 张切片已全部开始下载"
+          : `已保存 ${savedCount}/${parts.length} 张切片`,
+        savedCount > 0 ? "success" : "error"
+      )
+    } finally {
+      setIsSavingAll(false)
+    }
+  }
+
+  const handlePublishNote = async () => {
+    if (isPublishing || parts.length === 0) return
+    setIsPublishing(true)
+    try {
+      const baseName = getBasename(filename)
+      const res = await publishNoteToXhs({
+        title: `${baseName} 三联全景画卷`,
+        content: `用 Spliter 制作的无缝三联画卷，滑动查看连贯全景长图效果~ 📸\n\n#全景图 #三联图 #摄影 #Spliter`,
+        images: parts.map((p) => p.dataUrl),
+      })
+      showToast(res.message, res.success ? "success" : "error")
+    } finally {
+      setIsPublishing(false)
     }
   }
 
@@ -127,6 +176,7 @@ export function Splitter() {
     updateParts([])
     setFilename("")
     setError(null)
+    setToast(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ""
     }
@@ -220,7 +270,24 @@ export function Splitter() {
   const tileAspect = parts[0].width / parts[0].height
 
   return (
-    <div className="flex flex-col items-center gap-4 sm:gap-5 w-full">
+    <div className="relative flex flex-col items-center gap-4 sm:gap-5 w-full">
+      {/* 操作提示 Toast */}
+      {toast && (
+        <div
+          role="status"
+          className={cn(
+            "fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2.5 rounded-full shadow-lg text-sm font-medium transition-all duration-200 animate-in fade-in slide-in-from-top-3",
+            toast.type === "success"
+              ? "bg-foreground text-background"
+              : toast.type === "error"
+              ? "bg-destructive text-white"
+              : "bg-card text-foreground border border-border"
+          )}
+        >
+          <span>{toast.text}</span>
+        </div>
+      )}
+
       <PostPreview
         text={`${getBasename(filename)}，三等分切片`}
         media={
@@ -230,10 +297,10 @@ export function Splitter() {
             renderAction={(idx) => (
               <button
                 type="button"
-                aria-label={`下载第 ${idx + 1} 张`}
-                title={`下载第 ${idx + 1} 张`}
+                aria-label={inXhs ? `保存第 ${idx + 1} 张到相册` : `下载第 ${idx + 1} 张`}
+                title={inXhs ? `保存第 ${idx + 1} 张到相册` : `下载第 ${idx + 1} 张`}
                 className="size-7 inline-flex items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80 transition-colors cursor-pointer active:scale-90"
-                onClick={() => downloadPart(parts[idx])}
+                onClick={() => void handleSavePart(parts[idx])}
               >
                 <DownloadIcon className="size-3.5 sm:size-4" />
               </button>
@@ -242,14 +309,31 @@ export function Splitter() {
         }
       />
 
-      <div className="flex flex-col items-center gap-3 w-full sm:w-auto mt-1">
+      <div className="flex flex-col items-center gap-2.5 w-full sm:w-auto mt-1">
+        {/* 小红书发布笔记按钮 */}
         <button
           type="button"
-          onClick={() => void downloadAll()}
-          className="group/button inline-flex w-full sm:w-auto shrink-0 items-center justify-center border border-transparent bg-clip-padding whitespace-nowrap transition-all outline-none select-none h-11 rounded-full bg-x px-6 text-[15px] font-bold text-background hover:bg-x/90 cursor-pointer gap-2 shadow-sm active:scale-[0.98]"
+          onClick={() => void handlePublishNote()}
+          disabled={isPublishing}
+          className="group/button inline-flex w-full sm:w-auto shrink-0 items-center justify-center border border-transparent bg-clip-padding whitespace-nowrap transition-all outline-none select-none h-11 rounded-full bg-[#ff2442] hover:bg-[#e01d39] text-white px-6 text-[15px] font-bold cursor-pointer gap-2 shadow-sm active:scale-[0.98] disabled:opacity-50"
+        >
+          <XiaohongshuIcon className="size-4" />
+          {isPublishing ? "正在唤起发布页…" : "发布到小红书笔记"}
+        </button>
+
+        {/* 保存全部到系统相册 / 下载全部 */}
+        <button
+          type="button"
+          onClick={() => void handleSaveAll()}
+          disabled={isSavingAll}
+          className="group/button inline-flex w-full sm:w-auto shrink-0 items-center justify-center border border-transparent bg-clip-padding whitespace-nowrap transition-all outline-none select-none h-11 rounded-full bg-x px-6 text-[15px] font-bold text-background hover:bg-x/90 cursor-pointer gap-2 shadow-sm active:scale-[0.98] disabled:opacity-50"
         >
           <DownloadIcon className="size-4" />
-          下载全部三张切片
+          {isSavingAll
+            ? "正在保存…"
+            : inXhs
+            ? "保存全部到系统相册"
+            : "下载全部三张切片"}
         </button>
 
         <button
