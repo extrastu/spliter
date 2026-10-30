@@ -3,7 +3,6 @@ import { ThemeToggle } from "./components/ThemeToggle"
 import { ArrowRightIcon } from "./components/Icons"
 import { HeroDemo } from "./components/HeroDemo"
 import { Splitter } from "./components/Splitter"
-import { XhsFollowButton } from "./components/XhsFollowButton"
 import { fetchContainerTopSpacing } from "./lib/xhs"
 
 export default function App() {
@@ -65,7 +64,7 @@ export default function App() {
 
   const FooterInfo = (
     <span className="text-muted-foreground select-none">
-      纯本地无损裁切 · 专为小红书全景连图设计
+      纯本地无损裁切 · 保护隐私安全
     </span>
   )
 
@@ -78,20 +77,19 @@ export default function App() {
         <nav className="flex h-14 sm:h-16 items-center justify-between">
           {Logo}
           <div className="flex items-center gap-2.5 sm:gap-3">
-            <XhsFollowButton />
             <ThemeToggle />
           </div>
         </nav>
 
         <section className="pt-6 pb-6 sm:pt-8 sm:pb-8">
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-[#ff2442]/10 text-[#ff2442] dark:text-[#ff4d64] px-3 py-1 text-xs font-medium mb-3 select-none">
-            小红书三联图切片
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-medium mb-3 select-none">
+            全景无缝切片
           </div>
           <h1 className="text-2xl font-bold tracking-tight sm:text-4xl">
             制作无缝三联图
           </h1>
           <p className="mt-2 text-sm sm:text-base text-muted-foreground">
-            上传一张宽画幅全景大片，秒级等分为 3 张连图。发布小红书笔记时按顺序上传，左右横滑无缝展开如画卷。
+            上传一张宽画幅全景大片，秒级等分为 3 张连图切片。按序排版无缝拼接，连贯展开如一整幅画卷。
           </p>
         </section>
 
@@ -114,7 +112,6 @@ export default function App() {
       <nav className="flex h-14 sm:h-16 items-center justify-between">
         {Logo}
         <div className="flex items-center gap-2.5 sm:gap-4">
-          <XhsFollowButton />
           <ThemeToggle />
           <a
             className="flex items-center gap-1 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground cursor-pointer"
@@ -128,22 +125,22 @@ export default function App() {
 
       <section className="flex flex-1 flex-col items-center justify-center gap-8 py-10 sm:gap-10 sm:py-16 text-center">
         <div className="flex max-w-lg flex-col items-center gap-4 sm:gap-5">
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-[#ff2442]/10 text-[#ff2442] dark:text-[#ff4d64] px-3 py-1 text-xs font-medium select-none">
-            小红书爆款图文神器 · 视觉冲击力拉满
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-medium select-none">
+            全景大片分割 · 视觉冲击力拉满
           </div>
           <h1 className="text-[1.85rem] sm:text-[2.5rem] md:text-[3rem] leading-tight font-bold sm:font-medium tracking-tight text-balance">
-            制作小红书无缝三联图
+            制作无缝三联图
           </h1>
           <p className="max-w-md text-[14px] sm:text-[15px] leading-relaxed sm:leading-tight text-muted-foreground text-pretty">
-            将一张全景大片一键等分为 3 张连图切片。在小红书发布笔记时按序号上传，读者横向滑动即可体验沉浸式全景画卷。
+            将一张宽幅全景大片均分为三等份连图切片。发布时按序排列，视觉无缝连贯，宛如展开一整幅沉浸式全景画卷。
           </p>
           <div className="mt-1 flex flex-col items-center gap-3">
             <button
               type="button"
               onClick={() => navigate("/split")}
-              className="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 active:scale-95 bg-[#ff2442] text-white hover:bg-[#e01d39] h-10 sm:h-9 rounded-full px-5 sm:px-4 text-[14px] sm:text-[13px] font-medium cursor-pointer shadow-sm"
+              className="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 active:scale-95 bg-primary text-primary-foreground hover:bg-primary/90 h-10 sm:h-9 rounded-full px-5 sm:px-4 text-[14px] sm:text-[13px] font-medium cursor-pointer shadow-sm"
             >
-              立即制作小红书三联图
+              立即制作无缝三联图
             </button>
           </div>
         </div>
@@ -159,7 +156,7 @@ export default function App() {
           <div className="flex flex-col gap-1">
             <p className="text-sm font-medium">上传宽幅全景大片</p>
             <p className="text-[13px] leading-tight text-muted-foreground">
-              相机风光、手机全景或胶片横图均可，横幅越宽视觉越震撼。
+              相机风光、手机全景、电影截图或胶片横图均可，画幅越宽视觉越震撼。
             </p>
           </div>
         </div>
@@ -175,9 +172,9 @@ export default function App() {
         <div className="flex gap-4 sm:flex-col sm:gap-2">
           <span className="w-5 shrink-0 text-[13px] text-muted-foreground tabular-nums">03</span>
           <div className="flex flex-col gap-1">
-            <p className="text-sm font-medium">按序发布小红书笔记</p>
+            <p className="text-sm font-medium">按序排版发布连图</p>
             <p className="text-[13px] leading-tight text-muted-foreground">
-              在小红书发图文时按 1、2、3 顺序添加切片，读者左右滑动即可连贯浏览。
+              发布或分享时按 1、2、3 顺序添加切片，横向排列连贯无缝如画卷。
             </p>
           </div>
         </div>

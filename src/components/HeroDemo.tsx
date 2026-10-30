@@ -89,7 +89,7 @@ export function HeroDemo() {
         {isAfter ? (
           <>
             <p className="text-[12px] sm:text-[13px] leading-tight text-muted-foreground">
-              三等分切割完成！发在小红书笔记中向左滑动，无缝展开为连贯全景画卷。
+              三等分切片完成！按顺序拼接或排版，连贯展开宛如一整幅全景画卷。
             </p>
             <button
               type="button"
@@ -102,7 +102,7 @@ export function HeroDemo() {
         ) : (
           <>
             <p className="text-[12px] sm:text-[13px] leading-tight text-muted-foreground">
-              这是一整张宽画幅大片，点击体验小红书三联切图效果。
+              这是一整张宽画幅全景大片，点击体验无缝三联切图效果。
             </p>
             <button
               type="button"
