@@ -162,8 +162,8 @@ export function Splitter() {
     try {
       const baseName = getBasename(filename)
       const res = await publishNoteToXhs({
-        title: `${baseName} 三联全景画卷`,
-        content: `用 Spliter 制作的无缝三联画卷，滑动查看连贯全景长图效果~ 📸\n\n#全景图 #三联图 #摄影 #Spliter`,
+        title: `${baseName} ｜ 无缝全景长图 🏔️`,
+        content: `把宽幅大片切成三等份发小红书，左右横滑无缝衔接宛如画卷展开～ 📸 向左滑动查看连贯全景长图！\n\n#小红书三联图 #全景长图 #摄影日常 #横滑大片`,
         images: parts.map((p) => p.dataUrl),
       })
       showToast(res.message, res.success ? "success" : "error")
@@ -235,10 +235,13 @@ export function Splitter() {
       <PhotoPlusIcon className="size-8 text-x" />
       <div>
         <p className="font-bold text-base sm:text-lg">
-          {isProcessing ? "正在切割…" : "拖入图片到这里"}
+          {isProcessing ? "正在切割…" : "拖入全景大片到这里"}
         </p>
         <p className="mt-1 text-xs sm:text-sm text-muted-foreground">
           或点击选择图片，支持直接截图粘贴 (Ctrl+V / ⌘V)
+        </p>
+        <p className="mt-1 text-xs text-muted-foreground/80">
+          推荐横幅全景、胶片画卷或摄影大片，切成三联发小红书效果最佳
         </p>
       </div>
     </label>
@@ -289,7 +292,9 @@ export function Splitter() {
       )}
 
       <PostPreview
-        text={`${getBasename(filename)}，三等分切片`}
+        name="全景摄影日记"
+        title={`${getBasename(filename)} ｜ 无缝全景长图 🏔️`}
+        text={`把「${getBasename(filename)}」切成三联发小红书，左右横滑无缝衔接太绝了！发布笔记时按 1、2、3 顺序添加即可 ✨`}
         media={
           <TileGrid
             tiles={tiles}
@@ -297,8 +302,8 @@ export function Splitter() {
             renderAction={(idx) => (
               <button
                 type="button"
-                aria-label={inXhs ? `保存第 ${idx + 1} 张到相册` : `下载第 ${idx + 1} 张`}
-                title={inXhs ? `保存第 ${idx + 1} 张到相册` : `下载第 ${idx + 1} 张`}
+                aria-label={inXhs ? `保存第 ${idx + 1} 张切片到相册` : `下载第 ${idx + 1} 张切片`}
+                title={inXhs ? `保存第 ${idx + 1} 张切片到相册` : `下载第 ${idx + 1} 张切片`}
                 className="size-7 inline-flex items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80 transition-colors cursor-pointer active:scale-90"
                 onClick={() => void handleSavePart(parts[idx])}
               >
@@ -318,7 +323,7 @@ export function Splitter() {
           className="group/button inline-flex w-full sm:w-auto shrink-0 items-center justify-center border border-transparent bg-clip-padding whitespace-nowrap transition-all outline-none select-none h-11 rounded-full bg-[#ff2442] hover:bg-[#e01d39] text-white px-6 text-[15px] font-bold cursor-pointer gap-2 shadow-sm active:scale-[0.98] disabled:opacity-50"
         >
           <XiaohongshuIcon className="size-4" />
-          {isPublishing ? "正在唤起发布页…" : "发布到小红书笔记"}
+          {isPublishing ? "正在唤起小红书发布页…" : "一键发布到小红书笔记"}
         </button>
 
         {/* 保存全部到系统相册 / 下载全部 */}
@@ -332,9 +337,13 @@ export function Splitter() {
           {isSavingAll
             ? "正在保存…"
             : inXhs
-            ? "保存全部到系统相册"
-            : "下载全部三张切片"}
+            ? "保存全部 3 张切片到系统相册"
+            : "下载全部 3 张切片（发小红书）"}
         </button>
+
+        <p className="text-xs text-muted-foreground text-center max-w-sm leading-relaxed px-2">
+          💡 小红书发布技巧：发笔记时依次选择 1、2、3 号切片，发布后读者向左横滑即可无缝展开连贯全景。
+        </p>
 
         <button
           type="button"

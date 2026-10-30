@@ -34,6 +34,11 @@ export function XhsFollowButton({ className }: { className?: string }) {
     }
   }
 
+  // 仅在小红书容器内或已有关注状态时渲染
+  if (!inXhs && followStatus === -1) {
+    return null
+  }
+
   // 关注状态文本与样式映射
   if (followStatus === 1) {
     return (
