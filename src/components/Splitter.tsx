@@ -2,8 +2,8 @@ import { useState, useRef, useEffect, useCallback } from "react"
 import { cn } from "../lib/utils"
 import { PostPreview } from "./PostPreview"
 import { TileGrid } from "./TileGrid"
-import { PhotoPlusIcon, DownloadIcon, XiaohongshuIcon } from "./Icons"
-import { saveImageToAlbum, publishNoteToXhs, isXhsContainer } from "../lib/xhs"
+import { PhotoPlusIcon, DownloadIcon } from "./Icons"
+import { saveImageToAlbum, isXhsContainer } from "../lib/xhs"
 
 export interface SplitPart {
   index: number
@@ -84,7 +84,6 @@ export function Splitter() {
   const [error, setError] = useState<string | null>(null)
   const [toast, setToast] = useState<{ text: string; type?: "info" | "success" | "error" } | null>(null)
   const [isSavingAll, setIsSavingAll] = useState(false)
-  const [isPublishing, setIsPublishing] = useState(false)
 
   const inXhs = isXhsContainer()
 
@@ -153,22 +152,6 @@ export function Splitter() {
       )
     } finally {
       setIsSavingAll(false)
-    }
-  }
-
-  const handlePublishNote = async () => {
-    if (isPublishing || parts.length === 0) return
-    setIsPublishing(true)
-    try {
-      const baseName = getBasename(filename)
-      const res = await publishNoteToXhs({
-        title: `${baseName} ｜ 无缝全景长图 🏔️`,
-        content: `把宽幅大片切成三等份发小红书，左右横滑无缝衔接宛如画卷展开～ 📸 向左滑动查看连贯全景长图！\n\n#小红书三联图 #全景长图 #摄影日常 #横滑大片`,
-        images: parts.map((p) => p.dataUrl),
-      })
-      showToast(res.message, res.success ? "success" : "error")
-    } finally {
-      setIsPublishing(false)
     }
   }
 
@@ -241,7 +224,7 @@ export function Splitter() {
           或点击选择图片，支持直接截图粘贴 (Ctrl+V / ⌘V)
         </p>
         <p className="mt-1 text-xs text-muted-foreground/80">
-          推荐横幅全景、胶片画卷或摄影大片，切成三联发小红书效果最佳
+          推荐横幅全景、风景大片或长画卷，均分为 3 份无缝连图呈现
         </p>
       </div>
     </label>
@@ -293,9 +276,9 @@ export function Splitter() {
       )}
 
       <PostPreview
-        name="全景摄影日记"
-        title={`${getBasename(filename)} ｜ 无缝全景长图 🏔️`}
-        text={`把「${getBasename(filename)}」切成三联发小红书，左右横滑无缝衔接太绝了！发布笔记时按 1、2、3 顺序添加即可 ✨`}
+        name="全景创作者"
+        title={`${getBasename(filename)} ｜ 无缝全景三联图 🏔️`}
+        text={`把「${getBasename(filename)}」切成三等份连图，按 1、2、3 顺序排列即可无缝拼接为一整幅连贯全景画卷 ✨`}
         media={
           <TileGrid
             tiles={tiles}
@@ -316,34 +299,23 @@ export function Splitter() {
       />
 
       <div className="flex flex-col items-center gap-2.5 w-full sm:w-auto mt-1">
-        {/* 小红书发布笔记按钮 */}
-        <button
-          type="button"
-          onClick={() => void handlePublishNote()}
-          disabled={isPublishing}
-          className="group/button inline-flex w-full sm:w-auto shrink-0 items-center justify-center border border-transparent bg-clip-padding whitespace-nowrap transition-all outline-none select-none h-11 rounded-full bg-[#ff2442] hover:bg-[#e01d39] text-white px-6 text-[15px] font-bold cursor-pointer gap-2 shadow-sm active:scale-[0.98] disabled:opacity-50"
-        >
-          <XiaohongshuIcon className="size-4" />
-          {isPublishing ? "正在唤起小红书发布页…" : "一键发布到小红书笔记"}
-        </button>
-
         {/* 保存全部到系统相册 / 下载全部 */}
         <button
           type="button"
           onClick={() => void handleSaveAll()}
           disabled={isSavingAll}
-          className="group/button inline-flex w-full sm:w-auto shrink-0 items-center justify-center border border-transparent bg-clip-padding whitespace-nowrap transition-all outline-none select-none h-11 rounded-full bg-x px-6 text-[15px] font-bold text-background hover:bg-x/90 cursor-pointer gap-2 shadow-sm active:scale-[0.98] disabled:opacity-50"
+          className="group/button inline-flex w-full sm:w-auto shrink-0 items-center justify-center border border-transparent bg-clip-padding whitespace-nowrap transition-all outline-none select-none h-11 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 px-7 text-[15px] font-bold cursor-pointer gap-2 shadow-sm active:scale-[0.98] disabled:opacity-50"
         >
           <DownloadIcon className="size-4" />
           {isSavingAll
             ? "正在保存…"
             : inXhs
             ? "保存全部 3 张切片到系统相册"
-            : "下载全部 3 张切片（发小红书）"}
+            : "下载全部 3 张切片"}
         </button>
 
         <p className="text-xs text-muted-foreground text-center max-w-sm leading-relaxed px-2">
-          💡 小红书发布技巧：发笔记时依次选择 1、2、3 号切片，发布后读者向左横滑即可无缝展开连贯全景。
+          💡 排版小贴士：发布或分享时依次选择 1、2、3 号切片，即可呈现无缝拼接的全景视觉效果。
         </p>
 
         <button

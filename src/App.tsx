@@ -3,6 +3,7 @@ import { ThemeToggle } from "./components/ThemeToggle"
 import { ArrowRightIcon } from "./components/Icons"
 import { HeroDemo } from "./components/HeroDemo"
 import { Splitter } from "./components/Splitter"
+import { XhsFollowButton } from "./components/XhsFollowButton"
 import { fetchContainerTopSpacing } from "./lib/xhs"
 
 export default function App() {
