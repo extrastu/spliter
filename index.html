@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" class="antialiased">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+    <title>Spliter: 在 X 上发布三联无缝全景长图</title>
+    <meta name="description" content="一键将宽幅全景图片均分为三等份，在 X (Twitter) 上发布无缝滚动的连贯三联图。完全免费、秒级裁切、纯本地处理不上传。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      (function() {
+        try {
+          var theme = localStorage.getItem('theme');
+          var isDark = theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="bg-background text-foreground min-h-svh selection:bg-foreground selection:text-background font-sans">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

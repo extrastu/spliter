@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    :root {
+      --bar-color: #111111;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bar-color: #ededed;
+      }
+    }
+  </style>
+  <rect x="3" y="6" width="7" height="20" rx="3" fill="var(--bar-color)" />
+  <rect x="12.5" y="6" width="7" height="20" rx="1.5" fill="var(--bar-color)" />
+  <rect x="22" y="6" width="7" height="20" rx="3" fill="var(--bar-color)" opacity="0.38" />
+</svg>

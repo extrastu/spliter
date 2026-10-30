@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --x: #1a1a1a;
+    --background: #fff;
+    --foreground: #111;
+    --card: #fff;
+    --card-foreground: #111;
+    --popover: #fff;
+    --popover-foreground: #111;
+    --primary: #111;
+    --primary-foreground: #fff;
+    --secondary: #f2f2f2;
+    --secondary-foreground: #111;
+    --muted: #f7f7f7;
+    --muted-foreground: #737373;
+    --accent: #f2f2f2;
+    --accent-foreground: #111;
+    --destructive: #dc2626;
+    --destructive-foreground: #fff;
+    --border: #ececec;
+    --input: #d9d9d9;
+    --ring: #111;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --x: #f2f2f2;
+    --background: #0b0b0b;
+    --foreground: #ededed;
+    --card: #0b0b0b;
+    --card-foreground: #ededed;
+    --popover: #0b0b0b;
+    --popover-foreground: #ededed;
+    --primary: #ededed;
+    --primary-foreground: #0b0b0b;
+    --secondary: #1a1a1a;
+    --secondary-foreground: #ededed;
+    --muted: #161616;
+    --muted-foreground: #8a8a8a;
+    --accent: #1a1a1a;
+    --accent-foreground: #ededed;
+    --destructive: #ef4444;
+    --destructive-foreground: #ededed;
+    --border: #232323;
+    --input: #333;
+    --ring: #ededed;
+  }
+
+  * {
+    border-color: var(--border);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+}
+
+@keyframes blade {
+  0% {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.blade {
+  background: var(--foreground);
+  width: 2px;
+  box-shadow: 0 0 10px var(--foreground);
+  transform-origin: top;
+  animation: 0.45s cubic-bezier(0.7, 0, 0.3, 1) both blade;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blade {
+    animation: none;
+  }
+  .transition-\[gap\] {
+    transition: none;
+  }
+}
