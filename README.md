@@ -22,12 +22,13 @@
 # 1. 安装依赖
 npm install
 
-# 2. 启动开发服务器
+# 2. 启动本地开发调试服务器（支持热重载 HMR 与小红书 API 模拟）
 npm run dev
 
-# 3. 生产打包
+# 3. 本地预览生产构建产物
 npm run build
-
-# 4. 预览生产环境
 npm run preview
+
+# 4. 构建并打包小红书小工具规范离线 Zip 包（输出 minitool.zip）
+npm run pack
 ```
