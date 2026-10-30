@@ -3,6 +3,7 @@ import { cn } from "../lib/utils"
 import { PostPreview } from "./PostPreview"
 import { TileGrid } from "./TileGrid"
 import { PhotoPlusIcon, DownloadIcon } from "./Icons"
+import { XhsFollowButton } from "./XhsFollowButton"
 import { saveImageToAlbum, isXhsContainer } from "../lib/xhs"
 
 export interface SplitPart {
@@ -313,6 +314,12 @@ export function Splitter() {
             ? "保存全部 3 张切片到系统相册"
             : "下载全部 3 张切片"}
         </button>
+
+        {/* 切割完成后引导关注作者 */}
+        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-muted/60 border border-border/80 text-xs text-muted-foreground select-none">
+          <span>喜欢这个小工具？</span>
+          <XhsFollowButton />
+        </div>
 
         <p className="text-xs text-muted-foreground text-center max-w-sm leading-relaxed px-2">
           💡 排版小贴士：发布或分享时依次选择 1、2、3 号切片，即可呈现无缝拼接的全景视觉效果。

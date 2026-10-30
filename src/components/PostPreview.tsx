@@ -1,12 +1,14 @@
 import type { ReactNode } from "react"
 import { cn } from "../lib/utils"
 import { MessageCircleIcon, HeartIcon, Share2Icon, StarIcon } from "./Icons"
+import { XhsFollowButton } from "./XhsFollowButton"
 
 export interface PostPreviewProps {
   media: ReactNode
   name?: string
   title?: string
   text?: string
+  action?: ReactNode
   className?: string
 }
 
@@ -15,6 +17,7 @@ export function PostPreview({
   name = "全景创作者",
   title = "无缝全景三联图 ｜ 连贯画卷 🏔️",
   text = "将一张宽画幅全景大片切为三等份，连贯排版无缝衔接，宛如展开一整幅画卷 ✨",
+  action,
   className,
 }: PostPreviewProps) {
   return (
@@ -39,9 +42,7 @@ export function PostPreview({
             </span>
           </div>
         </div>
-        <span className="inline-flex items-center h-6 px-2.5 rounded-full text-xs font-medium text-muted-foreground bg-secondary select-none">
-          无缝三联
-        </span>
+        {action ?? <XhsFollowButton />}
       </div>
 
       {/* 切片展示区 */}

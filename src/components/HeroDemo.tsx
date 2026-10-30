@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import { TileGrid } from "./TileGrid"
 import { ScissorsIcon } from "./Icons"
+import { XhsFollowButton } from "./XhsFollowButton"
 
 export function HeroDemo() {
   const [status, setStatus] = useState<"before" | "cutting" | "after">("before")
@@ -91,13 +92,16 @@ export function HeroDemo() {
             <p className="text-[12px] sm:text-[13px] leading-tight text-muted-foreground">
               三等分切片完成！按顺序拼接或排版，连贯展开宛如一整幅全景画卷。
             </p>
-            <button
-              type="button"
-              className="self-start sm:self-auto text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground cursor-pointer underline-offset-4 hover:underline"
-              onClick={() => setStatus("before")}
-            >
-              重新演示
-            </button>
+            <div className="flex items-center gap-2.5 self-start sm:self-auto">
+              <XhsFollowButton className="h-6.5 px-2.5 text-[11px]" />
+              <button
+                type="button"
+                className="text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground cursor-pointer underline-offset-4 hover:underline"
+                onClick={() => setStatus("before")}
+              >
+                重新演示
+              </button>
+            </div>
           </>
         ) : (
           <>

@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react"
-import { fetchAuthorFollowStatus, followToolAuthor, isXhsContainer } from "../lib/xhs"
+import { fetchAuthorFollowStatus, followToolAuthor } from "../lib/xhs"
 import { cn } from "../lib/utils"
 
 export function XhsFollowButton({ className }: { className?: string }) {
-  const [followStatus, setFollowStatus] = useState<number>(-1)
+  const [followStatus, setFollowStatus] = useState<number>(0)
   const [loading, setLoading] = useState(false)
-  const inXhs = isXhsContainer()
 
   useEffect(() => {
     let isMounted = true
     async function checkStatus() {
       const status = await fetchAuthorFollowStatus()
-      if (isMounted) {
+      if (isMounted && status >= 0) {
         setFollowStatus(status)
       }
     }
@@ -34,11 +33,6 @@ export function XhsFollowButton({ className }: { className?: string }) {
     }
   }
 
-  // 仅在小红书容器内或已有关注状态时渲染
-  if (!inXhs && followStatus === -1) {
-    return null
-  }
-
   // 关注状态文本与样式映射
   if (followStatus === 1) {
     return (
@@ -46,7 +40,7 @@ export function XhsFollowButton({ className }: { className?: string }) {
         type="button"
         disabled
         className={cn(
-          "inline-flex items-center gap-1 h-7 px-2.5 rounded-full text-xs font-medium bg-muted text-muted-foreground cursor-default border border-border select-none",
+          "inline-flex items-center gap-1.5 h-7 px-3 rounded-full text-xs font-medium bg-muted text-muted-foreground cursor-default border border-border select-none",
           className
         )}
       >
@@ -79,7 +73,7 @@ export function XhsFollowButton({ className }: { className?: string }) {
         "bg-[#ff2442] text-white hover:bg-[#e01d39] disabled:opacity-50",
         className
       )}
-      title={inXhs ? "关注小工具作者" : "小红书关注"}
+      title="关注小工具作者"
     >
       <span>+</span>
       <span>{loading ? "处理中…" : "关注作者"}</span>

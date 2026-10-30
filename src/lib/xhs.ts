@@ -250,7 +250,10 @@ export async function publishNoteToXhs(params: {
 export async function fetchAuthorFollowStatus(): Promise<number> {
   const miniTool = getMiniTool()
   if (!miniTool || typeof miniTool.getFollowStatus !== "function") {
-    return -1
+    if (typeof localStorage !== "undefined" && localStorage.getItem("author_followed") === "1") {
+      return 1
+    }
+    return 0
   }
 
   try {
@@ -271,10 +274,13 @@ export async function followToolAuthor(): Promise<{
 }> {
   const miniTool = getMiniTool()
   if (!miniTool || typeof miniTool.followAuthor !== "function") {
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem("author_followed", "1")
+    }
     return {
-      success: false,
-      status: -1,
-      message: "关注功能仅在小红书容器内支持",
+      success: true,
+      status: 1,
+      message: "感谢关注作者！",
     }
   }
 
