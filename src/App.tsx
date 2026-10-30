@@ -3,7 +3,7 @@ import { ThemeToggle } from "./components/ThemeToggle"
 import { ArrowRightIcon } from "./components/Icons"
 import { HeroDemo } from "./components/HeroDemo"
 import { Splitter } from "./components/Splitter"
-import { XhsFollowButton } from "./components/XhsFollowButton"
+import { fetchContainerTopSpacing } from "./lib/xhs"
 
 export default function App() {
   const [route, setRoute] = useState<string>(() => {
@@ -19,6 +19,25 @@ export default function App() {
     }
     window.addEventListener("popstate", handlePopState)
     return () => window.removeEventListener("popstate", handlePopState)
+  }, [])
+
+  useEffect(() => {
+    let mounted = true
+    const updateSpacing = async () => {
+      const spacing = await fetchContainerTopSpacing()
+      if (mounted && spacing > 0) {
+        document.documentElement.style.setProperty(
+          "--container-top-spacing",
+          `${spacing}px`
+        )
+      }
+    }
+    void updateSpacing()
+    window.addEventListener("resize", updateSpacing)
+    return () => {
+      mounted = false
+      window.removeEventListener("resize", updateSpacing)
+    }
   }, [])
 
   const navigate = (path: string) => {
@@ -51,7 +70,10 @@ export default function App() {
 
   if (route === "/split") {
     return (
-      <main className="mx-auto flex min-h-svh w-full max-w-2xl flex-col px-4 sm:px-6">
+      <main
+        className="mx-auto flex min-h-svh w-full max-w-2xl flex-col px-4 sm:px-6 pt-[var(--container-top-spacing)] sm:pt-0"
+        style={{ paddingTop: "var(--container-top-spacing)" }}
+      >
         <nav className="flex h-14 sm:h-16 items-center justify-between">
           {Logo}
           <div className="flex items-center gap-2.5 sm:gap-3">
@@ -84,7 +106,10 @@ export default function App() {
 
   // Home page route
   return (
-    <main className="mx-auto flex min-h-svh w-full max-w-5xl flex-col px-4 sm:px-6">
+    <main
+      className="mx-auto flex min-h-svh w-full max-w-5xl flex-col px-4 sm:px-6 pt-[var(--container-top-spacing)] sm:pt-0"
+      style={{ paddingTop: "var(--container-top-spacing)" }}
+    >
       <nav className="flex h-14 sm:h-16 items-center justify-between">
         {Logo}
         <div className="flex items-center gap-2.5 sm:gap-4">

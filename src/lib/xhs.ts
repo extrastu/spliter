@@ -30,8 +30,86 @@ if (
         console.log("[小红书容器模拟] followAuthor: 关注成功，状态变更为已关注 (1)")
         return { errMsg: "followAuthor:ok", follow_status: 1 }
       },
+      getWindowInfo: async () => {
+        return {
+          errMsg: "getWindowInfo:ok",
+          pixelRatio: window.devicePixelRatio || 2,
+          windowWidth: window.innerWidth,
+          windowHeight: window.innerHeight,
+          screenWidth: window.screen.width,
+          screenHeight: window.screen.height,
+          statusBarHeight: 47,
+          safeArea: {
+            left: 0,
+            top: 47,
+            right: window.innerWidth,
+            bottom: window.innerHeight - 34,
+            width: window.innerWidth,
+            height: window.innerHeight - 81,
+          },
+          menuButtons: {
+            back: {
+              left: 16,
+              top: 52,
+              width: 32,
+              height: 32,
+              bottom: 84,
+              right: 48,
+            },
+            share: {
+              left: window.innerWidth - 80,
+              top: 52,
+              width: 32,
+              height: 32,
+              bottom: 84,
+              right: window.innerWidth - 48,
+            },
+            me: null,
+          },
+        }
+      },
     },
   }
+}
+
+/**
+ * 获取小红书容器顶部避让高度（状态栏 + 原生返回/分享胶囊按钮）
+ */
+export async function fetchContainerTopSpacing(): Promise<number> {
+  // 如果是宽屏桌面环境且不在小工具容器内，无需顶部避让
+  if (typeof window !== "undefined" && window.innerWidth >= 640 && !isXhsContainer()) {
+    return 0
+  }
+
+  const miniTool = getMiniTool()
+  if (miniTool && typeof miniTool.getWindowInfo === "function") {
+    try {
+      const info = await miniTool.getWindowInfo()
+      const backBottom = info.menuButtons?.back?.bottom
+      const shareBottom = info.menuButtons?.share?.bottom
+      const meBottom = info.menuButtons?.me?.bottom
+      const maxBtnBottom = Math.max(backBottom || 0, shareBottom || 0, meBottom || 0)
+      let spacing = 0
+      if (maxBtnBottom > 0) {
+        spacing = Math.ceil(maxBtnBottom + 8) // 原生胶囊按钮下方留 8px 呼吸间距
+      } else if (info.statusBarHeight) {
+        spacing = Math.ceil(info.statusBarHeight + 44) // 状态栏 + 44px 原生导航栏
+      } else if (info.safeArea?.top) {
+        spacing = Math.ceil(info.safeArea.top + 44)
+      }
+
+      if (spacing > 0 && typeof document !== "undefined") {
+        document.documentElement.style.setProperty(
+          "--container-top-spacing",
+          `${spacing}px`
+        )
+      }
+      return spacing
+    } catch {
+      // 忽略异常，降级到 CSS 变量
+    }
+  }
+  return 0
 }
 
 /**

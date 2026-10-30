@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "pack": "npm run build && cd dist && zip -r ../minitool.zip . -x '*.DS_Store'"
+    "pack": "rm -f minitool.zip && npm run build && cd dist && zip -r ../minitool.zip . -x '*.DS_Store'"
   },
   "dependencies": {
     "clsx": "^2.1.1",

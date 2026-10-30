@@ -278,8 +278,9 @@ export function Splitter() {
       {toast && (
         <div
           role="status"
+          style={{ top: "calc(var(--container-top-spacing, 0px) + 16px)" }}
           className={cn(
-            "fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2.5 rounded-full shadow-lg text-sm font-medium transition-all duration-200 animate-in fade-in slide-in-from-top-3",
+            "fixed left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2.5 rounded-full shadow-lg text-sm font-medium transition-all duration-200 animate-in fade-in slide-in-from-top-3",
             toast.type === "success"
               ? "bg-foreground text-background"
               : toast.type === "error"

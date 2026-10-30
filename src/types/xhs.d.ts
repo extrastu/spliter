@@ -1,4 +1,36 @@
+export interface XhsRect {
+  left: number
+  top: number
+  right: number
+  bottom: number
+  width: number
+  height: number
+}
+
+export interface XhsWindowInfo {
+  errMsg: string
+  pixelRatio?: number
+  screenWidth?: number
+  screenHeight?: number
+  windowWidth?: number
+  windowHeight?: number
+  statusBarHeight?: number
+  screenTop?: number
+  safeArea?: XhsRect
+  menuButtons?: {
+    back?: XhsRect | null
+    share?: XhsRect | null
+    me?: XhsRect | null
+  }
+}
+
 export interface XhsMiniTool {
+  getWindowInfo?(options?: {
+    success?: (res: XhsWindowInfo) => void
+    fail?: (err: { errMsg: string }) => void
+    complete?: () => void
+  }): Promise<XhsWindowInfo>
+
   postNote(options: {
     title?: string
     content?: string
